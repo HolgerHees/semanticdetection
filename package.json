@@ -1,0 +1,19 @@
+{
+  "name": "marvin-smarthome-control",
+  "version": "1.0.0",
+  "description": "An Amazon Smart Home API implementation for marvin's voice detection",
+  "main": "index.js",
+  "author": "Holger Hees",
+  "license": "GPLv2",
+  "dependencies": {
+    "alexa-sdk": "^1.0.12"
+  },
+  "optionalDependencies": {
+    "node-lambda": "0.1.5"
+  },
+  "scripts": {
+    "setup": "node-lambda setup",
+    "run": "node-lambda run",
+    "deploy": "node-lambda deploy"
+  }
+}
