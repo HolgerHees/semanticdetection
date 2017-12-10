@@ -80,7 +80,7 @@ module.exports = {
                 { "id": "others_bassbox", "phrase": "bassbox"},
                 { "id": "others_automower", "phrase": ["OR","mower","rasen"]},
                 { "id": "others_good_morning", "phrase": ["OR","guten morgen","aufstehen"]},
-                { "id": "others_go_sleeping", "phrase": ["AND","$schlafen$","$gehen$"]},
+                { "id": "others_go_sleeping", "phrase": ["AND","$schlafen$","$geh"]},
                 { "id": "others_good_night", "phrase": "gute nacht"}
             ]
         },
