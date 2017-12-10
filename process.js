@@ -9,26 +9,22 @@ const environment = require("./config/environment.js");
 
 const tests = require("./config/test.js");
 
-let cmds = tests.enabled;
-
-let start = getNanoSecTime();
+let start = Utils.getNanoSecTime();
 
 let processor = new Processor(environment, numbers);
 
+let cmds = tests.enabled;
+
 for (let i = 0; i < cmds.length; i++)
 {
-    let text = cmds[i].phrase;
+    let cmd = cmds[i];
 
-    let actions = processor.processPhrase(text, Utils.isUndefined(cmds[i].client_id) ? null : cmds[i].client_id);
+    let actions = processor.processPhrase(cmd.phrase, Utils.isUndefined(cmd.client_id) ? null : cmd.client_id);
 
-    Validator.validateResult(actions, cmds[i].items, text);
+    Validator.validateResult(actions, cmd.items, cmd.phrase);
 }
 
-let end = getNanoSecTime();
+let end = Utils.getNanoSecTime();
 console.log((end - start) / 1000 / 1000);
 
-function getNanoSecTime()
-{
-    let hrTime = process.hrtime();
-    return hrTime[0] * 1000000000 + hrTime[1];
-}
+
