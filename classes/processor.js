@@ -69,8 +69,6 @@ class Processor
 
     detectGroups(actions)
     {
-        let _all_area_ids = [];
-
         let _hasNonOtherGroup = false;
 
         let _actions = [];
@@ -98,7 +96,8 @@ class Processor
                 let action = _actions[i];
 
                 // validate "sonstiges" group. Is only valid if we find a area for it.
-                if (action.group === this.config.main.group_other ) {
+                if (action.group === this.config.main.group_other )
+                {
                     action.group = null;
                     action.result_i18n = null;
                 }
