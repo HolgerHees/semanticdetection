@@ -2,8 +2,8 @@ module.exports = {
     "enabled_bak": [
     ],
     "enabled": [
-        { "phrase": "licht gästezimmer an", "items": [["Light_Guestroom_Ceiling","ACTION_ON"]] },
-        { "phrase": "licht bastelzimmer an", "items": [["Light_Guestroom_Ceiling","ACTION_ON"]] },
+        { "phrase": "licht gästezimmer an", "items": [["Light_FF_Guestroom_Ceiling","ACTION_ON"]] },
+        { "phrase": "licht bastelzimmer an", "items": [["Light_FF_Guestroom_Ceiling","ACTION_ON"]] },
         { "phrase": "licht gäste bad an", "items": [["Light_FF_GuestWC_Ceiling","ACTION_ON"]] },
         { "phrase": "licht bad aus", "items": [["Light_SF_Bathroom_Ceiling","ACTION_OFF"],["Light_SF_Bathroom_Mirror","ACTION_OFF"]] },
         { "phrase": "Licht bad an", "items": [[ "Light_SF_Bathroom_Ceiling", "ACTION_ON" ]] },
@@ -71,9 +71,16 @@ module.exports = {
 
         { "phrase": "wie warm ist es im schlafzimmer und in der küche", "items": [[ "Temperature_SF_Bedroom", "READ_VALUE" ], [ null ] ] },
 
-        { "phrase": ">>>>>>>>>>> fernseher an", "items": [[ "", "ACTION_ON" ]] },
+        { "phrase": "wohnzimmer fernseher kanal fünf", "items": [[ "SAT_KEY_PRO7", "DEFAULT_ON" ]] },
 
-        { "phrase": "licht decken lampe aus", "client_id": "amzn1.ask.device.AFUSC2ZJY7NS7773FR5SXTQXXG6RX7B5RFFABEINCTSUNSNWBXUVICA3JDXEZSNBEXEXFRFYSRT3KSGQRRQQSK5YXLH4VWRWF6KEWSEP7RCLPXTYIPFZ7VHFYT36JOALTJJTNYGRYID6E2EYWGOEPGEPYN7Q", "items": [[ "Light_FF_Livingroom_Couch", "ACTION_OFF" ], [ "Light_FF_Livingroom_Diningtable", "ACTION_OFF" ]] },
+        { "phrase": "wohnzimmer fernseher an", "items": [[ "Scene6", "ACTION_ON" ]] },
+        { "phrase": "fernseher an", "client_id": "<alexa id 1>", "items": [[ "Scene6", "ACTION_ON" ]] },
+
+        { "phrase": "wohnzimmer fernseher kanal drei", "items": [[ "SAT_KEY_RTL", "DEFAULT_ON" ]] },
+
+        //{ "phrase": "wohnzimmer licht an flur licht aus", "items": [[ null ]] },
+
+        { "phrase": "licht decken lampe aus", "client_id": "<alexa id 1>", "items": [[ "Light_FF_Livingroom_Couch", "ACTION_OFF" ], [ "Light_FF_Livingroom_Diningtable", "ACTION_OFF" ]] },
 
         { "phrase": "flur obergeschoss 50%", "items": [[ null ]] },
         { "phrase": "licht obergeschoss 50%", "items": [[ null ]] },

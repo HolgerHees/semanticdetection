@@ -11,7 +11,7 @@ module.exports = {
         "message_join_separator": " und ",
         "message_error_separator": " aber ",
         "ok_message": "ok",
-        "help_message": "sage marvin zum beispiel schalte das licht im wohnzimmer an",
+        "help_message": "sage {your skill name} zum beispiel schalte das licht im wohnzimmer an",
         "help_ask_message": "versuche es einfach"
     },
     "main": {
@@ -21,8 +21,10 @@ module.exports = {
         "group_other": "others"
     },
     "clients": [
-        {"id":"<alexa_device_id_1>","area":"livingroom"},
-        {"id":"<alexa_device_id_2>","area":"bedroom"}
+        {"id":"<alexa id 1>","area":"livingroom"},
+        {"id":"<alexa id 2>","area":"bedroom"},
+        {"id":"<alexa id 3>","area":"floor"},
+        {"id":"<alexa id 4>","area":"bathroom"}
     ],
     "groups": [
         { "id": "rollershutter", "phrase": ["OR","rolläden","rolladen","rollladen","rollläden"] },
@@ -72,75 +74,78 @@ module.exports = {
         {
             "__comment": "Main areas",
             "groups": ["others"],
-            "areas": [
-                { "id": "others_tv", "phrase": "fernseh"},
-                { "id": "others_sat", "phrase": "sat"},
-                { "id": "others_ps4", "phrase": "ps4"},
-                { "id": "others_receiver", "phrase": "stereo"},
-                { "id": "others_bassbox", "phrase": "bassbox"},
-                { "id": "others_automower", "phrase": ["OR","mower","rasen"]},
-                { "id": "others_good_morning", "phrase": ["OR","guten morgen","aufstehen"]},
-                { "id": "others_go_sleeping", "phrase": ["AND","$schlafen$","$geh"]},
-                { "id": "others_good_night", "phrase": "gute nacht"}
-            ]
-        },
-        {
-            "__comment": "Main areas",
-            "groups": ["rollershutter","lights","sockets","temperatures","humidity"],
-            "areas": [
-                { "id": "livingroom", "phrase": ["OR", "$wohnzimmer", "$wohn$"] },
-                { "id": "boxroom", "phrase": "$kammer"},
-                { "id": "utilityroom", "phrase": "$hwr"},
-                { "id": "guestwc", "phrase": ["AND","$gäste",["OR","bad","wc","toilette"]]},
-                { "id": "guestroom", "phrase": ["OR", "$gästezimmer", [ "AND", "$gäste$","!<guestwc>"], "$bastelzimmer" ] },
-                { "id": "kitchen", "phrase": "$küche"},
-                { "id": "floor", "phrase": "$flur"},
-
-                { "id": "bathroom", "phrase": ["AND","bad","!<guestwc>"]},
-
-                { "id": "bedroom", "phrase": ["OR", "$schlafzimmer", "$schlaf$"] },
-                { "id": "dressingroom", "phrase": "$ankleide"},
-                { "id": "childroom", "phrase": "$kind"},
-                { "id": "attic", "phrase": "$dachboden"},
-                { "id": "terrace", "phrase": "$terasse"},
-                { "id": "frontdoor", "phrase": ["OR","$haustür","$eingangstür"]},
-                { "id": "carport", "phrase": ["OR","$auto","$carport"]},
-
-                { "id": "garage_streedside", "phrase": ["AND","$schuppen",["OR","vorne","strasse"]]},
-                { "id": "garage_gardenside", "phrase": ["AND","$schuppen","!<garage_streedside>"]},
-
-                { "id": "upstairs", "phrase": ["AND","$obergeschoss","!<floor>"]},
-                { "id": "downstairs", "phrase": ["AND",["OR","$untergeschoss","$erdgeschoss"],"!<floor>"]},
-
-                { "id": "indoor", "phrase": ["OR","innen","im haus"]},
-                { "id": "outdoor_streedside", "phrase": ["AND",["OR","aussen","garten"],["OR","vorne","strasse"]]},
-                { "id": "outdoor_gardenside", "phrase": ["AND",["OR","aussen","garten"],"hinten"]}
-            ]
-        }
-    ],
-    "area_fallback": [
-        {
-            "__comment": "Main areas fallbacks. Is used if no main area was detected before.",
-            "groups": ["rollershutter","lights","sockets","temperatures","humidity"],
-            "areas": [
-                { "id": "upstairs", "phrase": ["AND",["OR","$oben","$obergeschoss"],"!<floor>"] },
-                { "id": "downstairs", "phrase": ["AND",["OR","$unten","$untergeschoss","$erdgeschoss"],"!<floor>"] },
-                { "id": "outdoor", "phrase": ["OR","$aussen","$garten"] },
-                { "id": "all", "phrase": ["OR","$alle$","$komplett$","$vollständig$","$überall$"] }
-            ]
-        }
-    ],
-    "area_details": [
-        {
-            "__comment": "Sub areas.",
-            "groups": ["others"],
             "details": [
                 {
-                    "area_id": "others_tv",
-                    "area_details": [
-                        { "id": "others_tv_sat", "phrase": "sat" },
-                        { "id": "others_tv_ps4", "phrase": "ps4" },
-                        { "id": "others_tv_chromecast", "phrase": "cast" }
+                    "parent_area_id": null,
+                    "sub_areas": [
+                        {"id": "others_ps4", "phrase": "ps4"},
+                        {"id": "others_receiver", "phrase": "stereo"},
+                        {"id": "others_bassbox", "phrase": "bassbox"},
+                        {"id": "others_automower", "phrase": ["OR", "mower", "rasen"]},
+                        {"id": "others_good_morning", "phrase": ["OR", "guten morgen", "aufstehen"]},
+                        {"id": "others_go_sleeping", "phrase": ["AND", "$schlafen$", "$geh"]},
+                        {"id": "others_good_night", "phrase": "gute nacht"}
+                    ]
+                }
+            ]
+        },{
+            "__comment": "Main areas for all groups",
+            "groups": ["rollershutter","lights","sockets","temperatures","humidity","others"],
+            "details": [
+                {
+                    "parent_area_id": null,
+                    "sub_areas": [
+                        {"id": "livingroom", "phrase": ["OR", "$wohnzimmer", "$wohn$"]}
+                    ]
+                }
+            ]
+        },{
+            "__comment": "Main areas for all groups, exept 'others'",
+            "groups": ["rollershutter","lights","sockets","temperatures","humidity"],
+            "details": [
+                {
+                    "parent_area_id": null,
+                    "sub_areas": [
+                        {"id": "boxroom", "phrase": "$kammer"},
+                        {"id": "utilityroom", "phrase": "$hwr"},
+                        {"id": "guestwc", "phrase": ["AND", "$gäste", ["OR", "bad", "wc", "toilette"]]},
+                        {"id": "guestroom", "phrase": ["OR", "$gästezimmer", ["AND", "$gäste$", "!<guestwc>"], "$bastelzimmer"]},
+                        {"id": "kitchen", "phrase": "$küche"},
+                        {"id": "floor", "phrase": "$flur"},
+
+                        {"id": "bathroom", "phrase": ["AND", "bad", "!<guestwc>"]},
+
+                        {"id": "bedroom", "phrase": ["OR", "$schlafzimmer", "$schlaf$"]},
+                        {"id": "dressingroom", "phrase": "$ankleide"},
+                        {"id": "childroom", "phrase": "$kind"},
+                        {"id": "attic", "phrase": "$dachboden"},
+                        {"id": "terrace", "phrase": "$terasse"},
+                        {"id": "frontdoor", "phrase": ["OR", "$haustür", "$eingangstür"]},
+                        {"id": "carport", "phrase": ["OR", "$auto", "$carport"]},
+
+                        {"id": "garage_streedside", "phrase": ["AND", "$schuppen", ["OR", "vorne", "strasse"]]},
+                        {"id": "garage_gardenside", "phrase": ["AND", "$schuppen", "!<garage_streedside>"]},
+
+                        {"id": "upstairs", "phrase": ["AND", "$obergeschoss", "!<floor>"]},
+                        {"id": "downstairs", "phrase": ["AND", ["OR", "$untergeschoss", "$erdgeschoss"], "!<floor>"]},
+
+                        {"id": "indoor", "phrase": ["OR", "innen", "im haus"]},
+                        {"id": "outdoor_streedside","phrase": ["AND", ["OR", "aussen", "garten"], ["OR", "vorne", "strasse"]]},
+                        {"id": "outdoor_gardenside", "phrase": ["AND", ["OR", "aussen", "garten"], "hinten"]}
+                    ]
+                }
+            ]
+        },{
+            "__comment": "Main areas fallbacks. Is used if no main area was detected before.",
+            "groups": ["rollershutter","lights","sockets","temperatures","humidity"],
+            "details": [
+                {
+                    "parent_area_id": "fallback",
+                    "sub_areas": [
+                        {"id": "upstairs", "phrase": ["AND", ["OR", "$oben", "$obergeschoss"], "!<floor>"]},
+                        {"id": "downstairs","phrase": ["AND", ["OR", "$unten", "$untergeschoss", "$erdgeschoss"], "!<floor>"]},
+                        {"id": "outdoor", "phrase": ["OR", "$aussen", "$garten"]},
+                        {"id": "all", "phrase": ["OR", "$alle$", "$komplett$", "$vollständig$", "$überall$"]}
                     ]
                 }
             ]
@@ -149,8 +154,8 @@ module.exports = {
             "groups": ["rollershutter","lights","sockets","temperatures","humidity"],
             "details": [
                 {
-                    "area_id": "floor",
-                    "area_details": [
+                    "parent_area_id": "floor",
+                    "sub_areas": [
                         { "id": "floor_sf", "phrase": ["OR","$oben$","$obergeschoss$"] },
                         { "id": "floor_ff", "phrase": ["OR","$unten$","$untergeschoss$","$erdgeschoss$"] }
                     ]
@@ -161,8 +166,8 @@ module.exports = {
             "groups": ["lights"],
             "details": [
                 {
-                    "area_id": "livingroom",
-                    "area_details": [
+                    "parent_area_id": "livingroom",
+                    "sub_areas": [
                         { "id": "livingroom_bar", "phrase": "$tresen" },
 
                         { "id": "livingroom_standard_lamp_up", "phrase": ["AND","stehlampe","$oben$"] },
@@ -179,47 +184,102 @@ module.exports = {
                         { "id": "livingroom_ceiling_all", "phrase": ["AND","decke","!<livingroom_dining_table_ceiling>","decke","!<livingroom_couch_decke>"] }
                     ]
                 },{
-                    "area_id": "kitchen",
-                    "area_details": [
+                    "parent_area_id": "kitchen",
+                    "sub_areas": [
                         { "id": "kitchen_cupboard", "phrase": "schrank" },
                         { "id": "kitchen_ceiling", "phrase": "decke" }
                     ]
                 },{
-                    "area_id": "floor",
-                    "area_details": [
+                    "parent_area_id": "floor",
+                    "sub_areas": [
                         { "id": "floor_ff_mirror", "phrase": "spiegel" },
                         { "id": "floor_ff_indirekt", "phrase": "$indirekt" },
                         { "id": "floor_ff_ceil", "phrase": "decke" }
                     ]
                 },{
-                    "area_id": "guestwc",
-                    "area_details": [
+                    "parent_area_id": "guestwc",
+                    "sub_areas": [
                         { "id": "guestwc_mirror", "phrase": "spiegel" },
                         { "id": "guestwc_ceiling", "phrase": "decke" }
                     ]
                 },{
-                    "area_id": "bathroom",
-                    "area_details": [
+                    "parent_area_id": "bathroom",
+                    "sub_areas": [
                         { "id": "bathroom_mirror", "phrase": "spiegel" },
                         { "id": "bathroom_ceiling", "phrase": "decke" }
                     ]
                 },{
-                    "area_id": "childroom",
-                    "area_details": [
+                    "parent_area_id": "childroom",
+                    "sub_areas": [
                         { "id": "childroom1", "phrase": ["OR","1", "eins","vorne"]},
                         { "id": "childroom2", "phrase": ["OR","2", "zwei","hinten"]}
                     ]
                 },{
-                    "area_id": "bedroom",
-                    "area_details": [
+                    "parent_area_id": "bedroom",
+                    "sub_areas": [
                         { "id": "bedroom_ceiling", "phrase": "decke" },
                         { "id": "bedroom_left", "phrase": ["OR","fenster","links"] },
                         { "id": "bedroom_right", "phrase": ["OR","wand","rechts"] }
                     ]
                 },{
-                    "area_id": "all",
-                    "area_details": [
+                    "parent_area_id": "all",
+                    "sub_areas": [
                         { "id": "all_indirect", "phrase": "$indirekt" }
+                    ]
+                }
+            ]
+        },{
+            "__comment": "Sub areas.",
+            "groups": ["others"],
+            "details": [
+                {
+                    "parent_area_id": "livingroom",
+                    "sub_areas": [
+                        { "id": "livingroom_tv", "phrase": "fernseh" }
+                    ]
+                }
+            ]
+        },{
+            "__comment": "Sub areas.",
+            "groups": ["others"],
+            "details": [
+                {
+                    "parent_area_id": "livingroom_tv",
+                    "sub_areas": [
+                        { "id": "livingroom_tv_volumeup", "phrase": "lauter" },
+                        { "id": "livingroom_tv_volumedown", "phrase": "leiser" },
+                        { "id": "livingroom_tv_mute", "phrase": ["OR","lautlos","still","ton","laut"] },
+                        { "id": "livingroom_tv_input_hdmi1", "phrase": ["OR","sat",["AND",["OR","input","hdmi"],"eins"]] },
+                        { "id": "livingroom_tv_input_hdmi2", "phrase": ["OR","playstation","p. s. vier",["AND",["OR","input","hdmi"],"zwei"]] },
+                        { "id": "livingroom_tv_input_hdmi3", "phrase": ["OR","chromecast",["AND",["OR","input","hdmi"],"drei"]] },
+                        { "id": "livingroom_tv_input_hdmi4", "phrase": ["AND",["OR","input","hdmi"],"vier","!<livingroom_tv_input_hdmi2>"] },
+                        { "id": "livingroom_tv_channel_ard", "phrase": ["OR", "ARD", ["AND","kanal","eins"] ] },
+                        { "id": "livingroom_tv_channel_zdf", "phrase": ["OR", "ZDF", ["AND","kanal","zwei"] ] },
+                        { "id": "livingroom_tv_channel_rtl", "phrase": ["OR", "RTL", ["AND","kanal","drei"] ] },
+                        { "id": "livingroom_tv_channel_sat1", "phrase": ["OR", "SAT1", ["AND","kanal","vier"] ] },
+                        { "id": "livingroom_tv_channel_pro7", "phrase": ["OR", "PRO7", ["AND","kanal","fünf"] ] },
+                        { "id": "livingroom_tv_channel_servustv", "phrase": ["OR", "Servus TV", ["AND","kanal","sechs"] ] },
+                        { "id": "livingroom_tv_channel_vox", "phrase": ["OR", "VOX", ["AND","kanal","sieben"] ] },
+                        { "id": "livingroom_tv_channel_kabel1", "phrase": ["OR", "Kabel1", ["AND","kanal","acht"] ] },
+                        { "id": "livingroom_tv_channel_dmax", "phrase": ["OR", "DMAX", ["AND","kanal","neun"] ] },
+                        { "id": "livingroom_tv_channel_tlc", "phrase": ["OR", "TLC", ["AND","kanal","zehn"] ] },
+                        { "id": "livingroom_tv_channel_n24", "phrase": ["OR", "N24", ["AND","kanal","elf"] ] },
+                        { "id": "livingroom_tv_channel_ntv", "phrase": ["OR", "NTV", ["AND","kanal","zwölf"] ] },
+                        { "id": "livingroom_tv_channel_tagesschau24", "phrase": ["OR", "Tagesschau 24", ["AND","kanal","dreizehn"] ] },
+                        { "id": "livingroom_tv_channel_pro7max", "phrase": ["OR", "Pro7 Max", ["AND","kanal","vierzehn"] ] },
+                        { "id": "livingroom_tv_channel_sat1gold", "phrase": ["OR", "Sat1 Gold", ["AND","kanal","fünfzehn"] ] },
+                        { "id": "livingroom_tv_channel_sixx", "phrase": ["OR", "SIXX", ["AND","kanal","sechzehn"] ] },
+                        { "id": "livingroom_tv_channel_rtl2", "phrase": ["OR", "RTL2", ["AND","kanal","siebzehn"] ] },
+                        { "id": "livingroom_tv_channel_nitro", "phrase": ["OR", "Nitro", ["AND","kanal","achtzehn"] ] },
+                        { "id": "livingroom_tv_channel_superrtl", "phrase": ["OR", "Super RTL", ["AND","kanal","neunzehn"] ] },
+                        { "id": "livingroom_tv_channel_tele5", "phrase": ["OR", "Tele 5", ["AND","kanal","zwanzig"] ] },
+                        { "id": "livingroom_tv_channel_weltderwunder", "phrase": ["OR", "Tele 5", ["AND","kanal","einundzwanzig"] ] },
+                        { "id": "livingroom_tv_channel_arte", "phrase": ["OR", "Arte", ["AND","kanal","zweiundzwanzig"] ] },
+                        { "id": "livingroom_tv_channel_zdfinfo", "phrase": ["OR", "ZDF Info", ["AND","kanal","dreiundzwanzig"] ] },
+                        { "id": "livingroom_tv_channel_phoenix", "phrase": ["OR", "Phoenix", ["AND","kanal","vierundzwanzig"] ] },
+                        { "id": "livingroom_tv_channel_one", "phrase": ["OR", "One", ["AND","kanal","fünfundzwanzig"] ] },
+                        { "id": "livingroom_tv_channel_zdfneo", "phrase": ["OR", "ZDF Neo", ["AND","kanal","sechsundzwanzig"] ] },
+                        { "id": "livingroom_tv_channel_3sat", "phrase": ["OR", "3Sat", ["AND","kanal","siebenundzwanzig"] ] }
                     ]
                 }
             ]
@@ -276,7 +336,7 @@ module.exports = {
             { "id": "Light_FF_Livingroom_On", "areas": ["livingroom"], "items": ["Light_FF_Livingroom_Couch","Light_FF_Livingroom_Diningtable"], "cmds": ["ACTION_ON","ACTION_PERCENT"] },
             { "id": "Light_FF_Livingroom_Off", "areas": ["livingroom"], "items": ["Light_FF_Livingroom_Couch","Light_FF_Livingroom_Diningtable","Light_FF_Livingroom_Hue_Brightness"], "cmds": ["ACTION_OFF"] },
 
-            { "id": "Light_Guestroom_Ceiling", "areas": ["guestroom"], "items": ["Light_Guestroom_Ceiling"], "cmds": ["ACTION_ON","ACTION_OFF"] },
+            { "id": "Light_FF_Guestroom_Ceiling", "areas": ["guestroom"], "items": ["Light_FF_Guestroom_Ceiling"], "cmds": ["ACTION_ON","ACTION_OFF"] },
 
             { "id": "Light_SF_Floor_Ceiling", "areas": ["floor_sf"], "items": ["Light_SF_Floor_Ceiling"], "cmds": ["ACTION_ON","ACTION_OFF"] },
 
@@ -362,16 +422,48 @@ module.exports = {
             { "id": "Humidity_Garden", "areas": ["outdoor"], "items": ["Humidity_Garden"], "cmds": ["READ_VALUE"] }
         ],
         "others": [
-            { "id": "Controll_Tv_power", "areas": ["others_tv"], "items": [""], "cmds": ["ACTION_ON","ACTION_OFF"] },
-            { "id": "Controll_Tv_Kanal_Sat", "areas": ["others_tv_sat"], "items": [""], "cmds": ["DEFAULT_ON"] },
-            { "id": "Controll_Tv_Kanal_PS4", "areas": ["others_tv_ps4"], "items": [""], "cmds": ["DEFAULT_ON"] },
-            { "id": "Controll_Tv_Kanal_Chromecast", "areas": ["others_tv_chromecast"], "items": [""], "cmds": ["DEFAULT_ON"] },
-
             { "id": "Socket_Bassbox", "areas": ["others_bassbox"], "items": ["Socket_Bassbox"], "cmds": ["ACTION_ON","ACTION_OFF"] },
 
             { "id": "Scene2", "areas": ["others_good_morning"], "items": ["Scene2"], "cmds": ["DEFAULT_ON"], "i18n": "guten morgen" },
             { "id": "Scene3", "areas": ["others_go_sleeping"], "items": ["Scene3"], "cmds": ["DEFAULT_ON"] },
-            { "id": "Scene4", "areas": ["others_good_night"], "items": ["Scene4"], "cmds": ["DEFAULT_ON"], "i18n": "gute nacht" }
+            { "id": "Scene4", "areas": ["others_good_night"], "items": ["Scene4"], "cmds": ["DEFAULT_ON"], "i18n": "gute nacht" },
+
+            { "id": "Controll_Tv_power", "areas": ["livingroom_tv"], "items": ["Scene6"], "cmds": ["ACTION_ON","ACTION_OFF"] },
+            { "id": "Controll_Tv_volumeup", "areas": ["livingroom_tv_volumeup"], "items": ["TV_KEY_VOLUMEUP"], "cmds": ["DEFAULT_ON","ACTION_ON"] },
+            { "id": "Controll_Tv_volumedown", "areas": ["livingroom_tv_volumedown"], "items": ["TV_KEY_VOLUMEDOWN"], "cmds": ["DEFAULT_ON","ACTION_ON"] },
+            { "id": "Controll_Tv_mute", "areas": ["livingroom_tv_mute"], "items": ["TV_KEY_MUTE"], "cmds": ["DEFAULT_ON","ACTION_ON"] },
+            { "id": "Controll_Tv_input_hdmi1", "areas": ["livingroom_tv_input_hdmi1"], "items": ["TV_KEY_1"], "cmds": ["DEFAULT_ON","ACTION_ON"] },
+            { "id": "Controll_Tv_input_hdmi2", "areas": ["livingroom_tv_input_hdmi2"], "items": ["TV_KEY_2"], "cmds": ["DEFAULT_ON","ACTION_ON"] },
+            { "id": "Controll_Tv_input_hdmi3", "areas": ["livingroom_tv_input_hdmi3"], "items": ["TV_KEY_3"], "cmds": ["DEFAULT_ON","ACTION_ON"] },
+            { "id": "Controll_Tv_input_hdmi4", "areas": ["livingroom_tv_input_hdmi4"], "items": ["TV_KEY_4"], "cmds": ["DEFAULT_ON","ACTION_ON"] },
+
+            { "id": "Controll_Tv_Channel_ARD", "areas": ["livingroom_tv_channel_ard"], "items": ["SAT_KEY_ARD"], "cmds": ["DEFAULT_ON","ACTION_ON"] },
+            { "id": "Controll_Tv_Channel_ZDF", "areas": ["livingroom_tv_channel_zdf"], "items": ["SAT_KEY_ZDF"], "cmds": ["DEFAULT_ON","ACTION_ON"] },
+            { "id": "Controll_Tv_Channel_RTL", "areas": ["livingroom_tv_channel_rtl"], "items": ["SAT_KEY_RTL"], "cmds": ["DEFAULT_ON","ACTION_ON"] },
+            { "id": "Controll_Tv_Channel_SAT1", "areas": ["livingroom_tv_channel_sat1"], "items": ["SAT_KEY_SAT1"], "cmds": ["DEFAULT_ON","ACTION_ON"] },
+            { "id": "Controll_Tv_Channel_PRO7", "areas": ["livingroom_tv_channel_pro7"], "items": ["SAT_KEY_PRO7"], "cmds": ["DEFAULT_ON","ACTION_ON"] },
+            { "id": "Controll_Tv_Channel_SERVUSTV", "areas": ["livingroom_tv_channel_servustv"], "items": ["SAT_KEY_SERVUSTV"], "cmds": ["DEFAULT_ON","ACTION_ON"] },
+            { "id": "Controll_Tv_Channel_VOX", "areas": ["livingroom_tv_channel_vox"], "items": ["SAT_KEY_VOX"], "cmds": ["DEFAULT_ON","ACTION_ON"] },
+            { "id": "Controll_Tv_Channel_KABEL1", "areas": ["livingroom_tv_channel_kabel1"], "items": ["SAT_KEY_KABEL1"], "cmds": ["DEFAULT_ON","ACTION_ON"] },
+            { "id": "Controll_Tv_Channel_DMAX", "areas": ["livingroom_tv_channel_dmax"], "items": ["SAT_KEY_DMAX"], "cmds": ["DEFAULT_ON","ACTION_ON"] },
+            { "id": "Controll_Tv_Channel_TLC", "areas": ["livingroom_tv_channel_tlc"], "items": ["SAT_KEY_TLC"], "cmds": ["DEFAULT_ON","ACTION_ON"] },
+            { "id": "Controll_Tv_Channel_N24", "areas": ["livingroom_tv_channel_n24"], "items": ["SAT_KEY_N24"], "cmds": ["DEFAULT_ON","ACTION_ON"] },
+            { "id": "Controll_Tv_Channel_NTV", "areas": ["livingroom_tv_channel_ntv"], "items": ["SAT_KEY_NTV"], "cmds": ["DEFAULT_ON","ACTION_ON"] },
+            { "id": "Controll_Tv_Channel_TAGESSCHAU24", "areas": ["livingroom_tv_channel_tagesschau24"], "items": ["SAT_KEY_TAGESSCHAU24"], "cmds": ["DEFAULT_ON","ACTION_ON"] },
+            { "id": "Controll_Tv_Channel_PRO7MAX", "areas": ["livingroom_tv_channel_pro7max"], "items": ["SAT_KEY_PRO7MAX"], "cmds": ["DEFAULT_ON","ACTION_ON"] },
+            { "id": "Controll_Tv_Channel_SAT1GOLD", "areas": ["livingroom_tv_channel_sat1gold"], "items": ["SAT_KEY_SAT1GOLD"], "cmds": ["DEFAULT_ON","ACTION_ON"] },
+            { "id": "Controll_Tv_Channel_SIXX", "areas": ["livingroom_tv_channel_sixx"], "items": ["SAT_KEY_SIXX"], "cmds": ["DEFAULT_ON","ACTION_ON"] },
+            { "id": "Controll_Tv_Channel_RTL2", "areas": ["livingroom_tv_channel_rtl2"], "items": ["SAT_KEY_RTL2"], "cmds": ["DEFAULT_ON","ACTION_ON"] },
+            { "id": "Controll_Tv_Channel_NITRO", "areas": ["livingroom_tv_channel_nitro"], "items": ["SAT_KEY_NITRO"], "cmds": ["DEFAULT_ON","ACTION_ON"] },
+            { "id": "Controll_Tv_Channel_SUPERRTL", "areas": ["livingroom_tv_channel_superrtl"], "items": ["SAT_KEY_SUPERRTL"], "cmds": ["DEFAULT_ON","ACTION_ON"] },
+            { "id": "Controll_Tv_Channel_TELE5", "areas": ["livingroom_tv_channel_tele5"], "items": ["SAT_KEY_TELE5"], "cmds": ["DEFAULT_ON","ACTION_ON"] },
+            { "id": "Controll_Tv_Channel_WELTDERWUNDER", "areas": ["livingroom_tv_channel_weltderwunder"], "items": ["SAT_KEY_WELTDERWUNDER"], "cmds": ["DEFAULT_ON","ACTION_ON"] },
+            { "id": "Controll_Tv_Channel_ARTE", "areas": ["livingroom_tv_channel_arte"], "items": ["SAT_KEY_ARTE"], "cmds": ["DEFAULT_ON","ACTION_ON"] },
+            { "id": "Controll_Tv_Channel_ZDFINFO", "areas": ["livingroom_tv_channel_zdfinfo"], "items": ["SAT_KEY_ZDFINFO"], "cmds": ["DEFAULT_ON","ACTION_ON"] },
+            { "id": "Controll_Tv_Channel_PHOENIX", "areas": ["livingroom_tv_channel_phoenix"], "items": ["SAT_KEY_PHOENIX"], "cmds": ["DEFAULT_ON","ACTION_ON"] },
+            { "id": "Controll_Tv_Channel_ONE", "areas": ["livingroom_tv_channel_one"], "items": ["SAT_KEY_ONE"], "cmds": ["DEFAULT_ON","ACTION_ON"] },
+            { "id": "Controll_Tv_Channel_ZDFNEO", "areas": ["livingroom_tv_channel_zdfneo"], "items": ["SAT_KEY_ZDFNEO"], "cmds": ["DEFAULT_ON","ACTION_ON"] },
+            { "id": "Controll_Tv_Channel_3SAT", "areas": ["livingroom_tv_channel_3sat"], "items": ["SAT_KEY_3SAT"], "cmds": ["DEFAULT_ON","ACTION_ON"] }
         ]
     }
 }

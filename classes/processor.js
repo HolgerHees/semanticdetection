@@ -51,11 +51,13 @@ class Processor
         // Detect command like ON, OFF, UP, DOWN, READ, PERCENT (dimmer). Possible commands are depending on the previous detected group
         actions = this.detectCommands(actions);
 
+        let _all_area_ids = [];
+
         // Detect area like livingroom, kitchen, floor, other. Possible areas are depending on the detected group too
-        actions = this.detectAreas(actions, fallback_area);
+        actions = this.detectAreas(actions, fallback_area, _all_area_ids);
 
         // Detect area_details like floor_og, floor_eg ... Possible area_details are depending on the detected group and area
-        actions = this.detectAreaDetails(actions);
+        actions = this.detectAreaDetails(actions, _all_area_ids);
 
         // Detect items like livingroom couch light... Possible items are depending on the group, area and command
         actions = this.detectItems(actions);
@@ -68,8 +70,10 @@ class Processor
     detectGroups(actions)
     {
         let _all_area_ids = [];
-        let _actions = [];
 
+        let _hasNonOtherGroup = false;
+
+        let _actions = [];
         // detect GROUP (licht, dimmer, rolläden)
         for (let i = 0; i < actions.length; i++)
         {
@@ -79,22 +83,26 @@ class Processor
             action.group = group_data.id;
             action.result_i18n = group_data.i18n;
 
-            // validate "sonstiges" group. Is only valid if we find a area for it.
-            if (action.group === this.config.main.group_other)
+            if (action.group !== this.config.main.group_other)
             {
-                let areas = this.findAreas(this.config.areas, action, _all_area_ids);
-                if (areas.length === 0)
-                {
+                _hasNonOtherGroup = true
+            }
+
+            _actions.push(action);
+        }
+
+        if( _hasNonOtherGroup )
+        {
+            // check "other" group. Is only possible in case that no "non other" group was detected
+            for (let i = 0; i < _actions.length; i++) {
+                let action = _actions[i];
+
+                // validate "sonstiges" group. Is only valid if we find a area for it.
+                if (action.group === this.config.main.group_other ) {
                     action.group = null;
                     action.result_i18n = null;
                 }
-                else
-                {
-                    _actions = _actions.concat(this.fillAreas(areas, action));
-                    continue;
-                }
             }
-            _actions.push(action);
         }
 
         // fill GROUP backward
@@ -244,9 +252,8 @@ class Processor
         return null;
     }
 
-    detectAreas(actions, fallback_area)
+    detectAreas(actions, fallback_area, _all_area_ids)
     {
-        let _all_area_ids = [];
         let _actions = [];
 
         // detect AREAS
@@ -255,14 +262,14 @@ class Processor
             let action = actions[i];
             if (action.area == null)
             {
-                let found_areas = this.findAreas(this.config.areas, action, _all_area_ids);
+                let found_areas = this.findAreas(this.config.areas, null, action, _all_area_ids);
                 if (found_areas.length > 0)
                 {
                     _actions = _actions.concat(this.fillAreas(found_areas, action));
                     continue;
                 }
 
-                found_areas = this.findAreas(this.config.area_fallback, action, _all_area_ids);
+                found_areas = this.findAreas(this.config.areas, "fallback", action, _all_area_ids);
                 if (found_areas.length > 0)
                 {
                     _actions = _actions.concat(this.fillAreas(found_areas, action));
@@ -313,59 +320,42 @@ class Processor
         return _actions;
     }
 
-    findAreas(area_configs, action, exclude_ids)
+    detectAreaDetails(actions,_all_area_ids)
     {
-        let areas = [];
-        for (let i = 0; i < area_configs.length; i++)
+        while(true)
         {
-            let area_config = area_configs[i];
+            let _actions = [];
+            let _found = false;
 
-            // check if this areas are available for the current group (lights, shutters etc)
-            if (!area_config.groups.includes(action.group))
+            // detect AREAS
+            for (let i = 0; i < actions.length; i++)
             {
-                continue;
-            }
+                let action = actions[i];
+                let found_areas = this.findAreas(this.config.areas, action.area, action, _all_area_ids);
 
-            for (let j = 0; j < area_config.areas.length; j++)
-            {
-                let area = area_config.areas[j];
-
-                if (this.findPhrase(area.phrase, action, exclude_ids, false))
+                if (found_areas.length > 0)
                 {
-                    areas.push(area.id);
-                    exclude_ids.push(area.id);
+                    _found = true;
+                    _actions = _actions.concat(this.fillAreas(found_areas, action));
+                    continue;
                 }
+                _actions.push(action);
             }
-        }
 
-        return areas;
-    }
+            actions = _actions;
 
-    detectAreaDetails(actions)
-    {
-        let _all_area_detail_ids = [];
-        let _actions = [];
-
-        // detect AREAS
-        for (let i = 0; i < actions.length; i++)
-        {
-            let action = actions[i];
-            let area_details = this.findAreaDetails(this.config.area_details, action, _all_area_detail_ids);
-
-            if (area_details.length > 0)
+            if( !_found )
             {
-                _actions = _actions.concat(this.fillAreas(area_details, action));
-                continue;
+                break;
             }
-            _actions.push(action);
         }
 
-        return _actions;
+        return actions;
     }
 
-    findAreaDetails(area_configs, action, exclude_ids)
+    findAreas(area_configs, current_area, action, exclude_ids)
     {
-        let _area_details = [];
+        let _areas = [];
         for (let i = 0; i < area_configs.length; i++)
         {
             let area_detail_config = area_configs[i];
@@ -380,15 +370,15 @@ class Processor
             {
                 let details = area_detail_config.details[j];
 
-                if (details.area_id === action.area)
+                if (details.parent_area_id === current_area)
                 {
-                    for (let k = 0; k < details.area_details.length; k++)
+                    for (let k = 0; k < details.sub_areas.length; k++)
                     {
-                        let area_details = details.area_details[k];
+                        let area_details = details.sub_areas[k];
 
                         if (this.findPhrase(area_details.phrase, action, exclude_ids, false))
                         {
-                            _area_details.push(area_details.id);
+                            _areas.push(area_details.id);
                             exclude_ids.push(area_details.id);
                         }
                     }
@@ -396,7 +386,7 @@ class Processor
             }
         }
 
-        return _area_details;
+        return _areas;
     }
 
     detectItems(actions)
