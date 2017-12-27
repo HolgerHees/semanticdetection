@@ -153,20 +153,20 @@ class Processor
         {
             let group_config = group_configs[i];
 
-            // II. sub area check
-            if(!Utils.isUndefined(group_config.check_areas))
+            // II. phrase check
+            if(!Utils.isUndefined(group_config.phrase))
+            {
+                if (this.findPhrase(group_config.phrase, action, exclude_ids, false)) {
+                    return group_config;
+                }
+            }
+            // III. sub area check
+            else
             {
                 let found_areas = this.findAreas(action.area, group_config.id, action, []);
                 if (found_areas.length > 0)
                 {
                     local_groups.push(group_config.id);
-                    return group_config;
-                }
-            }
-            // III. phrase check
-            else
-            {
-                if (this.findPhrase(group_config.phrase, action, exclude_ids, false)) {
                     return group_config;
                 }
             }

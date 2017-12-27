@@ -18,7 +18,7 @@ module.exports = {
         "__comment": "Types",
         "phrase_separator": " und ",
         "phrase_stop": "stopp",
-        "group_other": "others"
+        "group_other": { "id": "others", "area_prefix": "others_" }
     },
     "clients": [
         {"id":"<alexa id 1>","area":"livingroom"},
@@ -33,7 +33,7 @@ module.exports = {
         { "id": "temperatures", "phrase": ["OR","temperatur","$warm$"], "i18n": "Im {area} sind es {value} Grad" },
         { "id": "humidity", "phrase": "feuchtigkeit" , "i18n": "Im {area} sind es {value} Grad"},
         { "id": "cameras", "phrase": ["OR", "kamera", "überwachung"] },
-        { "id": "electronics", "check_areas": true }
+        { "id": "electronics" }
     ],
     "commands": [
         {

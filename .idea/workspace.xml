@@ -4,6 +4,7 @@
     <list default="true" id="83bca022-e93b-49b4-bf2e-d138ab0cc406" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/classes/processor.js" afterPath="$PROJECT_DIR$/classes/processor.js" />
+      <change beforePath="$PROJECT_DIR$/config_samples/environment.js" afterPath="$PROJECT_DIR$/config_samples/environment.js" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -28,8 +29,8 @@
       <file leaf-file-name="environment.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/config/environment.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="144">
-              <caret line="20" column="53" lean-forward="false" selection-start-line="20" selection-start-column="42" selection-end-line="20" selection-end-column="53" />
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -65,21 +66,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="environment.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="environment.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/config_samples/environment.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="280">
-              <caret line="20" column="20" lean-forward="false" selection-start-line="20" selection-start-column="9" selection-end-line="20" selection-end-column="20" />
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="processor.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="processor.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/classes/processor.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="631">
-              <caret line="165" column="20" lean-forward="false" selection-start-line="165" selection-start-column="20" selection-end-line="165" selection-end-column="20" />
+            <state relative-caret-position="577">
+              <caret line="162" column="18" lean-forward="false" selection-start-line="162" selection-start-column="18" selection-end-line="162" selection-end-column="18" />
               <folding />
             </state>
           </provider>
@@ -143,9 +144,9 @@
         <option value="$PROJECT_DIR$/config_samples/test.js" />
         <option value="$PROJECT_DIR$/classes/validator.js" />
         <option value="$PROJECT_DIR$/config/test.js" />
-        <option value="$PROJECT_DIR$/config_samples/environment.js" />
         <option value="$PROJECT_DIR$/config/environment.js" />
         <option value="$PROJECT_DIR$/classes/processor.js" />
+        <option value="$PROJECT_DIR$/config_samples/environment.js" />
       </list>
     </option>
   </component>
@@ -371,7 +372,7 @@
       <workItem from="1514324738286" duration="1447000" />
       <workItem from="1514326521060" duration="786000" />
       <workItem from="1514366514521" duration="12733000" />
-      <workItem from="1514386453565" duration="2529000" />
+      <workItem from="1514386453565" duration="2992000" />
     </task>
     <task id="LOCAL-00001" summary="- simplified environment configuration.&#10;- support for nested trees&#10;- more tests">
       <created>1514324271591</created>
@@ -408,11 +409,18 @@
       <option name="project" value="LOCAL" />
       <updated>1514388089015</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="small optimisations">
+      <created>1514389020943</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1514389020943</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="33301000" />
+    <option name="totallyTimeSpent" value="33764000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1920" height="1044" extended-state="6" />
@@ -459,7 +467,8 @@
     <MESSAGE value="improved detection of &quot;electronics&quot;" />
     <MESSAGE value="improved syntactic detection" />
     <MESSAGE value="simplified config and code" />
-    <option name="LAST_COMMIT_MESSAGE" value="simplified config and code" />
+    <MESSAGE value="small optimisations" />
+    <option name="LAST_COMMIT_MESSAGE" value="small optimisations" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -839,26 +848,26 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config_samples/environment.js">
+    <entry file="file://$PROJECT_DIR$/classes/processor.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="280">
-          <caret line="20" column="20" lean-forward="false" selection-start-line="20" selection-start-column="9" selection-end-line="20" selection-end-column="20" />
+        <state relative-caret-position="577">
+          <caret line="162" column="18" lean-forward="false" selection-start-line="162" selection-start-column="18" selection-end-line="162" selection-end-column="18" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/config/environment.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="144">
-          <caret line="20" column="53" lean-forward="false" selection-start-line="20" selection-start-column="42" selection-end-line="20" selection-end-column="53" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/classes/processor.js">
+    <entry file="file://$PROJECT_DIR$/config_samples/environment.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="631">
-          <caret line="165" column="20" lean-forward="false" selection-start-line="165" selection-start-column="20" selection-end-line="165" selection-end-column="20" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
