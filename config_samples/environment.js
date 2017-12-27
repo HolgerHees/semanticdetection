@@ -18,8 +18,7 @@ module.exports = {
         "__comment": "Types",
         "phrase_separator": " und ",
         "phrase_stop": "stopp",
-        "group_other": "others",
-        "groups_by_subarea": ["electronics"]
+        "group_other": "others"
     },
     "clients": [
         {"id":"<alexa id 1>","area":"livingroom"},
@@ -28,14 +27,13 @@ module.exports = {
         {"id":"<alexa id 4>","area":"bathroom"}
     ],
     "groups": [
-        //{ "id": "electronics" }, => is detected by "groups_by_subarea" check
         { "id": "rollershutter", "phrase": ["OR","rolläden","rolladen","rollladen","rollläden"] },
         { "id": "lights", "phrase": ["OR","licht","lampe","beleuchtung"] },
         { "id": "sockets", "phrase": "steckdose" },
         { "id": "temperatures", "phrase": ["OR","temperatur","$warm$"], "i18n": "Im {area} sind es {value} Grad" },
         { "id": "humidity", "phrase": "feuchtigkeit" , "i18n": "Im {area} sind es {value} Grad"},
         { "id": "cameras", "phrase": ["OR", "kamera", "überwachung"] },
-        { "id": "others" }
+        { "id": "electronics", "check_areas": true }
     ],
     "commands": [
         {
@@ -74,27 +72,17 @@ module.exports = {
     ],
     "areas": [
         {
-            "__comment": "Main areas",
-            "groups": ["others"],
-            "details": [
-                {
-                    "parent_area_id": null,
-                    "sub_areas": [
-                        // bassbox must stay here. Otherwise it will conflict with "bassbox light"
-                        {"id": "others_automower", "phrase": ["OR", "mower", "rasen"]},
-                        {"id": "others_good_morning", "phrase": ["OR", "guten morgen", "aufstehen"]},
-                        {"id": "others_go_sleeping", "phrase": ["AND", "$schlafen$", "$geh"]},
-                        {"id": "others_good_night", "phrase": "gute nacht"}
-                    ]
-                }
-            ]
-        },{
-            "__comment": "Main areas for all groups, exept 'electronics'",
+            "__comment": "Main areas for all groups",
             "groups": ["all"],
             "details": [
                 {
                     "parent_area_id": null,
                     "sub_areas": [
+                        {"id": "others_automower", "phrase": ["OR", "mower", "rasen"]},
+                        {"id": "others_good_morning", "phrase": ["OR", "guten morgen", "aufstehen"]},
+                        {"id": "others_go_sleeping", "phrase": ["AND", "$schlafen$", "$geh"]},
+                        {"id": "others_good_night", "phrase": "gute nacht"},
+
                         {"id": "livingroom", "phrase": ["OR", "$wohnzimmer", "$wohn$"]},
                         {"id": "boxroom", "phrase": "$kammer"},
                         {"id": "utilityroom", "phrase": "$hwr"},

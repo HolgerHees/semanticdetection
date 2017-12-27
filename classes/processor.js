@@ -69,6 +69,8 @@ class Processor
 
     detectGroups(actions,subAreaGroup)
     {
+
+        let _local_groups = [];
         let _actions = [];
         // detect GROUP (licht, dimmer, rolläden)
         for (let i = 0; i < actions.length; i++)
@@ -83,25 +85,9 @@ class Processor
             }
             else
             {
-                // find main group like lights, sockets etc.
-                let group_data = this.findGroup(this.config.groups, action, []);
-
-                // if we have no group data, try to check if we find groups based on their area => config "groups_by_subarea"
-                if ( group_data == null )
-                {
-                    for (let j = 0; j < this.config.main.groups_by_subarea.length; j++)
-                    {
-                        let subArea = this.config.main.groups_by_subarea[j];
-
-                        let found_areas = this.findAreas(action.area, subArea, action, []);
-                        if (found_areas.length > 0)
-                        {
-                            action.group = subArea;
-                            break;
-                        }
-                    }
-                }
-                else
+                // find main group like lights, sockets, rollershutter, electronics etc.
+                let group_data = this.findGroup(this.config.groups, action, _local_groups, []);
+                if ( group_data != null )
                 {
                     action.group = group_data.id;
                     action.result_i18n = group_data.i18n;
@@ -118,8 +104,8 @@ class Processor
         {
             let action = _actions[i];
 
-            // inherit only "non other" groups and no groups detected by "groups_by_subarea"
-            if (action.group === null && !this.config.main.groups_by_subarea.includes(previousGroup) )
+            // inherit only "non local groups" => not based on an area check
+            if (action.group === null && !_local_groups.includes(previousGroup) )
             {
                 action.group = previousGroup;
                 action.result_i18n = previousResultI18N;
@@ -136,8 +122,8 @@ class Processor
         {
             let action = _actions[i];
 
-            // inherit only "non other" groups and no groups detected by "groups_by_subarea"
-            if (action.group === null && !this.config.main.groups_by_subarea.includes(previousGroup) )
+            // inherit only "non local groups" => not based on an area check
+            if (action.group === null && !_local_groups.includes(previousGroup) )
             {
                 action.group = previousGroup;
                 action.result_i18n = previousResultI18N;
@@ -162,15 +148,26 @@ class Processor
         return _actions;
     }
 
-    findGroup(group_configs, action, exclude_ids)
+    findGroup(group_configs, action, local_groups, exclude_ids)
     {
         for (let i = 0; i < group_configs.length; i++)
         {
             let group_config = group_configs[i];
 
-            if (this.findPhrase(group_config.phrase, action, exclude_ids, false))
+            if(!Utils.isUndefined(group_config.check_areas))
             {
-                return group_config;
+                let found_areas = this.findAreas(action.area, group_config.id, action, []);
+                if (found_areas.length > 0)
+                {
+                    local_groups.push(group_config.id);
+                    return group_config;
+                }
+            }
+            else
+            {
+                if (this.findPhrase(group_config.phrase, action, exclude_ids, false)) {
+                    return group_config;
+                }
             }
         }
 
@@ -487,14 +484,7 @@ class Processor
             // config phrase is a exclude "!<EXCLUDED_ID>"
             if (config_phrase.startsWith("!<") && config_phrase.endsWith(">"))
             {
-                if (exclude_ids != null)
-                {
-                    return !exclude_ids.includes(config_phrase.substr(2, config_phrase.length - 3));
-                }
-                else
-                {
-                    Logger.error(">>>>>>>>>>exclude missing !!!!");
-                }
+                return !exclude_ids.includes(config_phrase.substr(2, config_phrase.length - 3));
             }
             // config phrase is a regex like "/REGEX/"
             else if (config_phrase.startsWith("/") && config_phrase.endsWith("/"))
