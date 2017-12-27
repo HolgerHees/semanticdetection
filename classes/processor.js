@@ -50,7 +50,7 @@ class Processor
         // Detect area like livingroom, kitchen, floor, other. Possible areas are depending on the detected group too
         actions = this.detectAreas(actions, fallback_area, _all_area_ids);
 
-        // Detect groups like lights, sockets, shutters, other etc
+        // Detect groups like lights, sockets, shutters, electronics, other etc
         actions = this.detectGroups(actions);
 
         // Detect command like ON, OFF, UP, DOWN, READ, PERCENT (dimmer). Possible commands are depending on the previous detected group
@@ -74,24 +74,37 @@ class Processor
         for (let i = 0; i < actions.length; i++)
         {
             let action = actions[i];
-            let group_data = this.findGroup(this.config.groups, action, []);
 
-            action.group = group_data.id;
-            action.result_i18n = group_data.i18n;
-
-            // for other groups, check if we find groups based on their area like "electronics"
-            if (action.group === this.config.main.group_other)
+            // if the area starts with "others", we should also force the group to "others"
+            if( action.area.startsWith( this.config.main.group_other ) )
             {
-                for(let j = 0; j < this.config.main.groups_by_subarea.length; j++ )
-                {
-                    let subArea = this.config.main.groups_by_subarea[j];
+                action.group = this.config.main.group_other;
+                action.result_i18n = null;
+            }
+            else
+            {
+                // find main group like lights, sockets etc.
+                let group_data = this.findGroup(this.config.groups, action, []);
 
-                    let found_areas = this.findAreas(action.area, subArea, action, []);
-                    if (found_areas.length > 0)
+                // if we have no group data, try to check if we find groups based on their area => config "groups_by_subarea"
+                if ( group_data == null )
+                {
+                    for (let j = 0; j < this.config.main.groups_by_subarea.length; j++)
                     {
-                        action.group = subArea;
-                        break;
+                        let subArea = this.config.main.groups_by_subarea[j];
+
+                        let found_areas = this.findAreas(action.area, subArea, action, []);
+                        if (found_areas.length > 0)
+                        {
+                            action.group = subArea;
+                            break;
+                        }
                     }
+                }
+                else
+                {
+                    action.group = group_data.id;
+                    action.result_i18n = group_data.i18n;
                 }
             }
 
@@ -99,37 +112,51 @@ class Processor
         }
 
         // fill GROUP backward
-        let previousGroup = this.config.main.group_other;
+        let previousGroup = null;
         let previousResultI18N = null;
         for (let i = _actions.length - 1; i >= 0; i--)
         {
             let action = _actions[i];
 
             // inherit only "non other" groups and no groups detected by "groups_by_subarea"
-            if (action.group === this.config.main.group_other && !this.config.main.groups_by_subarea.includes(previousGroup) )
+            if (action.group === null && !this.config.main.groups_by_subarea.includes(previousGroup) )
             {
                 action.group = previousGroup;
                 action.result_i18n = previousResultI18N;
             }
+
             previousGroup = action.group;
             previousResultI18N = action.result_i18n;
         }
 
         // fill GROUP forward
-        previousGroup = this.config.main.group_other;
+        previousGroup = null;
         previousResultI18N = null;
         for (let i = 0; i < _actions.length; i++)
         {
             let action = _actions[i];
 
             // inherit only "non other" groups and no groups detected by "groups_by_subarea"
-            if (action.group == this.config.main.group_other && !this.config.main.groups_by_subarea.includes(previousGroup) )
+            if (action.group === null && !this.config.main.groups_by_subarea.includes(previousGroup) )
             {
                 action.group = previousGroup;
                 action.result_i18n = previousResultI18N;
             }
+
             previousGroup = action.group;
             previousResultI18N = action.result_i18n;
+        }
+
+        // fill null GROUPs
+        for (let i = 0; i < _actions.length; i++)
+        {
+            let action = _actions[i];
+
+            if( action.group === null )
+            {
+                action.group = this.config.main.group_other;
+                action.result_i18n = null;
+            }
         }
 
         return _actions;
@@ -141,7 +168,7 @@ class Processor
         {
             let group_config = group_configs[i];
 
-            if (Utils.isUndefined(group_config.phrase) || this.findPhrase(group_config.phrase, action, exclude_ids, false))
+            if (this.findPhrase(group_config.phrase, action, exclude_ids, false))
             {
                 return group_config;
             }
@@ -259,14 +286,7 @@ class Processor
             let action = actions[i];
             if (action.area == null)
             {
-                let found_areas = this.findAreas(null, "others", action, _all_area_ids);
-                if (found_areas.length > 0)
-                {
-                    _actions = _actions.concat(this.fillAreas(found_areas, action));
-                    continue;
-                }
-
-                found_areas = this.findAreas(null, "all", action, _all_area_ids);
+                let found_areas = this.findAreas(null, "all", action, _all_area_ids);
                 if (found_areas.length > 0)
                 {
                     _actions = _actions.concat(this.fillAreas(found_areas, action));

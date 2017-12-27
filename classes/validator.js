@@ -55,6 +55,10 @@ class Validator
             console.log(current_available_items);
             console.log("expected_available_items:");
             console.log(expected_available_items);
+            console.log("current_missing_items:");
+            console.log(current_missing_items);
+            console.log("expected_missing_items:");
+            console.log(expected_missing_items);
             throw "Found item count mismatch";
         }
         else
