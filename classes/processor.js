@@ -44,7 +44,7 @@ class Processor
                 "error": null
             });
         }
-//
+
         let _all_area_ids = [];
 
         // Detect area like livingroom, kitchen, floor, other. Possible areas are depending on the detected group too
@@ -69,29 +69,20 @@ class Processor
 
     detectGroups(actions,subAreaGroup)
     {
-
         let _local_groups = [];
         let _actions = [];
+
         // detect GROUP (licht, dimmer, rolläden)
         for (let i = 0; i < actions.length; i++)
         {
             let action = actions[i];
 
-            // if the area starts with "others", we should also force the group to "others"
-            if( action.area.startsWith( this.config.main.group_other ) )
+            // find main group like lights, sockets, rollershutter, electronics etc.
+            let group_data = this.findGroup(this.config.groups, action, _local_groups, []);
+            if ( group_data != null )
             {
-                action.group = this.config.main.group_other;
-                action.result_i18n = null;
-            }
-            else
-            {
-                // find main group like lights, sockets, rollershutter, electronics etc.
-                let group_data = this.findGroup(this.config.groups, action, _local_groups, []);
-                if ( group_data != null )
-                {
-                    action.group = group_data.id;
-                    action.result_i18n = group_data.i18n;
-                }
+                action.group = group_data.id;
+                action.result_i18n = group_data.i18n;
             }
 
             _actions.push(action);
@@ -133,14 +124,14 @@ class Processor
             previousResultI18N = action.result_i18n;
         }
 
-        // fill null GROUPs
+        // fill null GROUPs with "others"
         for (let i = 0; i < _actions.length; i++)
         {
             let action = _actions[i];
 
             if( action.group === null )
             {
-                action.group = this.config.main.group_other;
+                action.group = this.config.main.group_other.id;
                 action.result_i18n = null;
             }
         }
@@ -150,10 +141,19 @@ class Processor
 
     findGroup(group_configs, action, local_groups, exclude_ids)
     {
+        // I. if the area starts with "others", we should also force the group to "others"
+        if( action.area.startsWith( this.config.main.group_other.area_prefix ) )
+        {
+            local_groups.push(this.config.main.group_other.id);
+            return this.config.main.group_other;
+        }
+
+        // find group based on a phrase or a sub area check
         for (let i = 0; i < group_configs.length; i++)
         {
             let group_config = group_configs[i];
 
+            // II. sub area check
             if(!Utils.isUndefined(group_config.check_areas))
             {
                 let found_areas = this.findAreas(action.area, group_config.id, action, []);
@@ -163,6 +163,7 @@ class Processor
                     return group_config;
                 }
             }
+            // III. phrase check
             else
             {
                 if (this.findPhrase(group_config.phrase, action, exclude_ids, false)) {

@@ -4,7 +4,6 @@
     <list default="true" id="83bca022-e93b-49b4-bf2e-d138ab0cc406" name="Default" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" afterPath="$PROJECT_DIR$/.idea/workspace.xml" />
       <change beforePath="$PROJECT_DIR$/classes/processor.js" afterPath="$PROJECT_DIR$/classes/processor.js" />
-      <change beforePath="$PROJECT_DIR$/config_samples/environment.js" afterPath="$PROJECT_DIR$/config_samples/environment.js" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -29,8 +28,8 @@
       <file leaf-file-name="environment.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/config/environment.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="414">
-              <caret line="74" column="51" lean-forward="false" selection-start-line="74" selection-start-column="36" selection-end-line="74" selection-end-column="51" />
+            <state relative-caret-position="144">
+              <caret line="20" column="53" lean-forward="false" selection-start-line="20" selection-start-column="42" selection-end-line="20" selection-end-column="53" />
               <folding />
             </state>
           </provider>
@@ -39,8 +38,8 @@
       <file leaf-file-name="test.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/config/test.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="18">
-              <caret line="1" column="16" lean-forward="false" selection-start-line="1" selection-start-column="16" selection-end-line="1" selection-end-column="16" />
+            <state relative-caret-position="0">
+              <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
               <folding />
             </state>
           </provider>
@@ -66,21 +65,21 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="environment.js" pinned="false" current-in-tab="true">
+      <file leaf-file-name="environment.js" pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/config_samples/environment.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="36">
-              <caret line="74" column="51" lean-forward="false" selection-start-line="74" selection-start-column="51" selection-end-line="74" selection-end-column="51" />
+            <state relative-caret-position="280">
+              <caret line="20" column="20" lean-forward="false" selection-start-line="20" selection-start-column="9" selection-end-line="20" selection-end-column="20" />
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="processor.js" pinned="false" current-in-tab="false">
+      <file leaf-file-name="processor.js" pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/classes/processor.js">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="689">
-              <caret line="87" column="0" lean-forward="false" selection-start-line="87" selection-start-column="0" selection-end-line="87" selection-end-column="0" />
+            <state relative-caret-position="631">
+              <caret line="165" column="20" lean-forward="false" selection-start-line="165" selection-start-column="20" selection-end-line="165" selection-end-column="20" />
               <folding />
             </state>
           </provider>
@@ -119,6 +118,7 @@
       <find>und</find>
       <find>groups</find>
       <find>local_groups</find>
+      <find>group_other</find>
     </findStrings>
     <replaceStrings>
       <replace>Controll_Sat_Channel_</replace>
@@ -143,9 +143,9 @@
         <option value="$PROJECT_DIR$/config_samples/test.js" />
         <option value="$PROJECT_DIR$/classes/validator.js" />
         <option value="$PROJECT_DIR$/config/test.js" />
-        <option value="$PROJECT_DIR$/classes/processor.js" />
-        <option value="$PROJECT_DIR$/config/environment.js" />
         <option value="$PROJECT_DIR$/config_samples/environment.js" />
+        <option value="$PROJECT_DIR$/config/environment.js" />
+        <option value="$PROJECT_DIR$/classes/processor.js" />
       </list>
     </option>
   </component>
@@ -371,7 +371,7 @@
       <workItem from="1514324738286" duration="1447000" />
       <workItem from="1514326521060" duration="786000" />
       <workItem from="1514366514521" duration="12733000" />
-      <workItem from="1514386453565" duration="1555000" />
+      <workItem from="1514386453565" duration="2529000" />
     </task>
     <task id="LOCAL-00001" summary="- simplified environment configuration.&#10;- support for nested trees&#10;- more tests">
       <created>1514324271591</created>
@@ -401,11 +401,18 @@
       <option name="project" value="LOCAL" />
       <updated>1514381440336</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="simplified config and code">
+      <created>1514388089014</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1514388089015</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TimeTrackingManager">
-    <option name="totallyTimeSpent" value="32327000" />
+    <option name="totallyTimeSpent" value="33301000" />
   </component>
   <component name="ToolWindowManager">
     <frame x="0" y="0" width="1920" height="1044" extended-state="6" />
@@ -451,7 +458,8 @@
     <MESSAGE value="remove unused variable" />
     <MESSAGE value="improved detection of &quot;electronics&quot;" />
     <MESSAGE value="improved syntactic detection" />
-    <option name="LAST_COMMIT_MESSAGE" value="improved syntactic detection" />
+    <MESSAGE value="simplified config and code" />
+    <option name="LAST_COMMIT_MESSAGE" value="simplified config and code" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager />
@@ -815,22 +823,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config/test.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="18">
-          <caret line="1" column="16" lean-forward="false" selection-start-line="1" selection-start-column="16" selection-end-line="1" selection-end-column="16" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/classes/processor.js">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="689">
-          <caret line="87" column="0" lean-forward="false" selection-start-line="87" selection-start-column="0" selection-end-line="87" selection-end-column="0" />
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/config_samples/test.js">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="0">
@@ -839,18 +831,34 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/config/environment.js">
+    <entry file="file://$PROJECT_DIR$/config/test.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="414">
-          <caret line="74" column="51" lean-forward="false" selection-start-line="74" selection-start-column="36" selection-end-line="74" selection-end-column="51" />
+        <state relative-caret-position="0">
+          <caret line="0" column="0" lean-forward="false" selection-start-line="0" selection-start-column="0" selection-end-line="0" selection-end-column="0" />
           <folding />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/config_samples/environment.js">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="36">
-          <caret line="74" column="51" lean-forward="false" selection-start-line="74" selection-start-column="51" selection-end-line="74" selection-end-column="51" />
+        <state relative-caret-position="280">
+          <caret line="20" column="20" lean-forward="false" selection-start-line="20" selection-start-column="9" selection-end-line="20" selection-end-column="20" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/config/environment.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="144">
+          <caret line="20" column="53" lean-forward="false" selection-start-line="20" selection-start-column="42" selection-end-line="20" selection-end-column="53" />
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/classes/processor.js">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="631">
+          <caret line="165" column="20" lean-forward="false" selection-start-line="165" selection-start-column="20" selection-end-line="165" selection-end-column="20" />
           <folding />
         </state>
       </provider>
