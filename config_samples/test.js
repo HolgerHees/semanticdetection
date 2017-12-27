@@ -19,6 +19,8 @@ module.exports = {
         { "phrase": "licht wohnzimmer stehlampe an", "items": [["Light_FF_Livingroom_Hue_Brightness2","ACTION_ON"],["Light_FF_Livingroom_Hue_Brightness3","ACTION_ON"]] },
         { "phrase": "wohnzimmer stehlampe an", "items": [["Light_FF_Livingroom_Hue_Brightness2","ACTION_ON"],["Light_FF_Livingroom_Hue_Brightness3","ACTION_ON"]] },
         { "phrase": "licht wohnzimmer bassbox an", "items": [["Light_FF_Livingroom_Hue_Brightness1","ACTION_ON"]] },
+        { "phrase": "wohnzimmer licht und bassbox an", "items": [[ "Light_FF_Livingroom_Couch", "ACTION_ON" ],[ "Light_FF_Livingroom_Diningtable", "ACTION_ON" ],[ "Socket_Bassbox", "ACTION_ON" ]] },
+        { "phrase": "wohnzimmer licht und licht bassbox an", "items": [[ "Light_FF_Livingroom_Couch", "ACTION_ON" ],[ "Light_FF_Livingroom_Diningtable", "ACTION_ON" ],[ "Light_FF_Livingroom_Hue_Brightness1", "ACTION_ON" ]] },
         { "phrase": "licht wohnzimmer couch indirekt an", "items": [["Light_FF_Livingroom_Hue_Brightness1","ACTION_ON"]] },
         { "phrase": "licht wohnzimmer couch decke an", "items": [["Light_FF_Livingroom_Couch","ACTION_ON"]] },
         { "phrase": "licht wohnzimmer couch an", "items": [["Light_FF_Livingroom_Couch","ACTION_ON"]] },
@@ -52,8 +54,6 @@ module.exports = {
         { "phrase": "licht im schlafzimmer wohnzimmer, flur und bad aus", "items": [[ "Light_FF_Livingroom_Couch", "ACTION_OFF" ],[ "Light_FF_Livingroom_Diningtable", "ACTION_OFF" ],[ "Light_FF_Livingroom_Hue_Brightness", "ACTION_OFF" ],[ "Light_FF_Floor_Ceiling", "ACTION_OFF" ],[ "Light_FF_Floor_Hue_Brightness", "ACTION_OFF" ],[ "Light_FF_Floor_Mirror", "ACTION_OFF" ],[ "Light_SF_Floor_Ceiling", "ACTION_OFF" ],[ "Light_SF_Bedroom_Ceiling", "ACTION_OFF" ],[ "Light_SF_Bedroom_Left", "ACTION_OFF" ],[ "Light_SF_Bedroom_Right", "ACTION_OFF" ],[ "Light_SF_Bathroom_Ceiling", "ACTION_OFF" ],[ "Light_SF_Bathroom_Mirror", "ACTION_OFF" ]] },
         { "phrase": "licht komplett aus und rolladen im schlafzimmer hoch", "items": [["Lights_Indoor","ACTION_OFF"],["Shutters_SF_Bedroom","ACTION_UP"]] },
         { "phrase": "licht komplett aus und rolladen hoch", "items": [["Lights_Indoor","ACTION_OFF"],["Shutters","ACTION_UP"]] },
-        { "phrase": "bassbox aus", "items": [[ "Socket_Bassbox", "ACTION_OFF" ]] },
-        { "phrase": "bassbox an", "items": [[ "Socket_Bassbox", "ACTION_ON" ]] },
         { "phrase": "licht im schlaf, wohn, flur und badezimmer an", "items": [[ "Light_FF_Livingroom_Couch", "ACTION_ON" ],[ "Light_FF_Livingroom_Diningtable", "ACTION_ON" ],[ "Light_FF_Floor_Ceiling", "ACTION_ON" ],[ "Light_SF_Bedroom_Ceiling", "ACTION_ON" ],[ "Light_SF_Bathroom_Ceiling", "ACTION_ON" ]] },
         { "phrase": "licht schlafcouch im wohnzimmer an", "items": [[ "Light_FF_Livingroom_Couch", "ACTION_ON" ]] },
         { "phrase": "flur oben und unten licht an", "items": [[ "Light_SF_Floor_Ceiling", "ACTION_ON" ], [ "Light_FF_Floor_Ceiling", "ACTION_ON" ]] },
@@ -69,18 +69,23 @@ module.exports = {
         { "phrase": "Schlafen gehen", "items": [[ "Scene3", "DEFAULT_ON" ]] },
         { "phrase": "Gute Nacht", "items": [[ "Scene4", "DEFAULT_ON" ]] },
 
+        { "phrase": "licht decken lampe aus", "client_id": "<alexa id 1>", "items": [[ "Light_FF_Livingroom_Couch", "ACTION_OFF" ], [ "Light_FF_Livingroom_Diningtable", "ACTION_OFF" ]] },
+        { "phrase": "bassbox aus", "client_id": "<alexa id 1>", "items": [[ "Socket_Bassbox", "ACTION_OFF" ]] },
+        { "phrase": "bassbox an", "client_id": "<alexa id 1>", "items": [[ "Socket_Bassbox", "ACTION_ON" ]] },
+        { "phrase": "fernseher an", "client_id": "<alexa id 1>", "items": [[ "Scene6", "ACTION_ON" ]] },
+
         { "phrase": "wie warm ist es im schlafzimmer und in der küche", "items": [[ "Temperature_SF_Bedroom", "READ_VALUE" ], [ null ] ] },
 
         { "phrase": "wohnzimmer fernseher kanal fünf", "items": [[ "SAT_KEY_PRO7", "DEFAULT_ON" ]] },
 
         { "phrase": "wohnzimmer fernseher an", "items": [[ "Scene6", "ACTION_ON" ]] },
-        { "phrase": "fernseher an", "client_id": "<alexa id 1>", "items": [[ "Scene6", "ACTION_ON" ]] },
 
         { "phrase": "wohnzimmer fernseher kanal drei", "items": [[ "SAT_KEY_RTL", "DEFAULT_ON" ]] },
 
+        { "phrase": "wohnzimmer licht und fernseher an", "items": [[ "Light_FF_Livingroom_Couch", "ACTION_ON" ],[ "Light_FF_Livingroom_Diningtable", "ACTION_ON" ],[ "Scene6", "ACTION_ON" ]] },
+
         //{ "phrase": "wohnzimmer licht an flur licht aus", "items": [[ null ]] },
 
-        { "phrase": "licht decken lampe aus", "client_id": "<alexa id 1>", "items": [[ "Light_FF_Livingroom_Couch", "ACTION_OFF" ], [ "Light_FF_Livingroom_Diningtable", "ACTION_OFF" ]] },
 
         { "phrase": "flur obergeschoss 50%", "items": [[ null ]] },
         { "phrase": "licht obergeschoss 50%", "items": [[ null ]] },

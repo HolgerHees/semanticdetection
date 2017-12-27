@@ -11,14 +11,15 @@ module.exports = {
         "message_join_separator": " und ",
         "message_error_separator": " aber ",
         "ok_message": "ok",
-        "help_message": "sage {your skill name} zum beispiel schalte das licht im wohnzimmer an",
+        "help_message": "sage marvin zum beispiel schalte das licht im wohnzimmer an",
         "help_ask_message": "versuche es einfach"
     },
     "main": {
         "__comment": "Types",
         "phrase_separator": " und ",
         "phrase_stop": "stopp",
-        "group_other": "others"
+        "group_other": "others",
+        "groups_by_subarea": ["electronics"]
     },
     "clients": [
         {"id":"<alexa id 1>","area":"livingroom"},
@@ -27,6 +28,7 @@ module.exports = {
         {"id":"<alexa id 4>","area":"bathroom"}
     ],
     "groups": [
+        //{ "id": "electronics" }, => is detected by "groups_by_subarea" check
         { "id": "rollershutter", "phrase": ["OR","rolläden","rolladen","rollladen","rollläden"] },
         { "id": "lights", "phrase": ["OR","licht","lampe","beleuchtung"] },
         { "id": "sockets", "phrase": "steckdose" },
@@ -37,8 +39,8 @@ module.exports = {
     ],
     "commands": [
         {
-            "__comment": "Commands for lights, sockets and others",
-            "groups": ["lights","sockets","others"],
+            "__comment": "Commands for lights, sockets, electronics and others",
+            "groups": ["lights","sockets","electronics","others"],
             "commands": [
                 { "id": "ACTION_OFF", "phrase": ["OR","$aus$","$ausschalten$","$beenden$","$beende$","$deaktiviere$","$stoppe$","$stoppen$"] },
                 { "id": "ACTION_ON", "phrase": ["OR","$an$","$ein$","$einschalten$","$starten$","$aktiviere$","$aktivieren$"] }
@@ -63,8 +65,8 @@ module.exports = {
                 { "id": "READ_VALUE" }
             ]
         },{
-            "__comment": "Commands for others",
-            "groups": ["others"],
+            "__comment": "Commands for electronics and others",
+            "groups": ["electronics","others"],
             "commands": [
                 { "id": "DEFAULT_ON" }
             ]
@@ -78,9 +80,7 @@ module.exports = {
                 {
                     "parent_area_id": null,
                     "sub_areas": [
-                        {"id": "others_ps4", "phrase": "ps4"},
-                        {"id": "others_receiver", "phrase": "stereo"},
-                        {"id": "others_bassbox", "phrase": "bassbox"},
+                        // bassbox must stay here. Otherwise it will conflict with "bassbox light"
                         {"id": "others_automower", "phrase": ["OR", "mower", "rasen"]},
                         {"id": "others_good_morning", "phrase": ["OR", "guten morgen", "aufstehen"]},
                         {"id": "others_go_sleeping", "phrase": ["AND", "$schlafen$", "$geh"]},
@@ -89,23 +89,13 @@ module.exports = {
                 }
             ]
         },{
-            "__comment": "Main areas for all groups",
-            "groups": ["rollershutter","lights","sockets","temperatures","humidity","others"],
+            "__comment": "Main areas for all groups, exept 'electronics'",
+            "groups": ["all"],
             "details": [
                 {
                     "parent_area_id": null,
                     "sub_areas": [
-                        {"id": "livingroom", "phrase": ["OR", "$wohnzimmer", "$wohn$"]}
-                    ]
-                }
-            ]
-        },{
-            "__comment": "Main areas for all groups, exept 'others'",
-            "groups": ["rollershutter","lights","sockets","temperatures","humidity"],
-            "details": [
-                {
-                    "parent_area_id": null,
-                    "sub_areas": [
+                        {"id": "livingroom", "phrase": ["OR", "$wohnzimmer", "$wohn$"]},
                         {"id": "boxroom", "phrase": "$kammer"},
                         {"id": "utilityroom", "phrase": "$hwr"},
                         {"id": "guestwc", "phrase": ["AND", "$gäste", ["OR", "bad", "wc", "toilette"]]},
@@ -137,7 +127,7 @@ module.exports = {
             ]
         },{
             "__comment": "Main areas fallbacks. Is used if no main area was detected before.",
-            "groups": ["rollershutter","lights","sockets","temperatures","humidity"],
+            "groups": ["all"],
             "details": [
                 {
                     "parent_area_id": "fallback",
@@ -230,18 +220,21 @@ module.exports = {
             ]
         },{
             "__comment": "Sub areas.",
-            "groups": ["others"],
+            "groups": ["electronics"],
             "details": [
                 {
                     "parent_area_id": "livingroom",
                     "sub_areas": [
-                        { "id": "livingroom_tv", "phrase": "fernseh" }
+                        { "id": "livingroom_tv", "phrase": "fernseh" },
+                        { "id": "livingroom_ps4", "phrase": "ps4"},
+                        { "id": "livingroom_receiver", "phrase": "stereo"},
+                        { "id": "livingroom_bassbox", "phrase": "bassbox"}
                     ]
                 }
             ]
         },{
             "__comment": "Sub areas.",
-            "groups": ["others"],
+            "groups": ["electronics"],
             "details": [
                 {
                     "parent_area_id": "livingroom_tv",
@@ -421,12 +414,8 @@ module.exports = {
             { "id": "Humidity_SF_Attic", "areas": ["attic"], "items": ["Humidity_SF_Attic"], "cmds": ["READ_VALUE"] },
             { "id": "Humidity_Garden", "areas": ["outdoor"], "items": ["Humidity_Garden"], "cmds": ["READ_VALUE"] }
         ],
-        "others": [
-            { "id": "Socket_Bassbox", "areas": ["others_bassbox"], "items": ["Socket_Bassbox"], "cmds": ["ACTION_ON","ACTION_OFF"] },
-
-            { "id": "Scene2", "areas": ["others_good_morning"], "items": ["Scene2"], "cmds": ["DEFAULT_ON"], "i18n": "guten morgen" },
-            { "id": "Scene3", "areas": ["others_go_sleeping"], "items": ["Scene3"], "cmds": ["DEFAULT_ON"] },
-            { "id": "Scene4", "areas": ["others_good_night"], "items": ["Scene4"], "cmds": ["DEFAULT_ON"], "i18n": "gute nacht" },
+        "electronics": [
+            { "id": "Socket_Bassbox", "areas": ["livingroom_bassbox"], "items": ["Socket_Bassbox"], "cmds": ["ACTION_ON","ACTION_OFF"] },
 
             { "id": "Controll_Tv_power", "areas": ["livingroom_tv"], "items": ["Scene6"], "cmds": ["ACTION_ON","ACTION_OFF"] },
             { "id": "Controll_Tv_volumeup", "areas": ["livingroom_tv_volumeup"], "items": ["TV_KEY_VOLUMEUP"], "cmds": ["DEFAULT_ON","ACTION_ON"] },
@@ -464,6 +453,12 @@ module.exports = {
             { "id": "Controll_Tv_Channel_ONE", "areas": ["livingroom_tv_channel_one"], "items": ["SAT_KEY_ONE"], "cmds": ["DEFAULT_ON","ACTION_ON"] },
             { "id": "Controll_Tv_Channel_ZDFNEO", "areas": ["livingroom_tv_channel_zdfneo"], "items": ["SAT_KEY_ZDFNEO"], "cmds": ["DEFAULT_ON","ACTION_ON"] },
             { "id": "Controll_Tv_Channel_3SAT", "areas": ["livingroom_tv_channel_3sat"], "items": ["SAT_KEY_3SAT"], "cmds": ["DEFAULT_ON","ACTION_ON"] }
+        ],
+        "others": [
+
+            { "id": "Scene2", "areas": ["others_good_morning"], "items": ["Scene2"], "cmds": ["DEFAULT_ON"], "i18n": "guten morgen" },
+            { "id": "Scene3", "areas": ["others_go_sleeping"], "items": ["Scene3"], "cmds": ["DEFAULT_ON"] },
+            { "id": "Scene4", "areas": ["others_good_night"], "items": ["Scene4"], "cmds": ["DEFAULT_ON"], "i18n": "gute nacht" }
         ]
     }
 }

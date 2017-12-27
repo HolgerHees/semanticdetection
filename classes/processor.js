@@ -44,17 +44,17 @@ class Processor
                 "error": null
             });
         }
+//
+        let _all_area_ids = [];
+
+        // Detect area like livingroom, kitchen, floor, other. Possible areas are depending on the detected group too
+        actions = this.detectAreas(actions, fallback_area, _all_area_ids);
 
         // Detect groups like lights, sockets, shutters, other etc
         actions = this.detectGroups(actions);
 
         // Detect command like ON, OFF, UP, DOWN, READ, PERCENT (dimmer). Possible commands are depending on the previous detected group
         actions = this.detectCommands(actions);
-
-        let _all_area_ids = [];
-
-        // Detect area like livingroom, kitchen, floor, other. Possible areas are depending on the detected group too
-        actions = this.detectAreas(actions, fallback_area, _all_area_ids);
 
         // Detect area_details like floor_og, floor_eg ... Possible area_details are depending on the detected group and area
         actions = this.detectAreaDetails(actions, _all_area_ids);
@@ -67,10 +67,8 @@ class Processor
         return actions;
     }
 
-    detectGroups(actions)
+    detectGroups(actions,subAreaGroup)
     {
-        let _hasNonOtherGroup = false;
-
         let _actions = [];
         // detect GROUP (licht, dimmer, rolläden)
         for (let i = 0; i < actions.length; i++)
@@ -81,36 +79,34 @@ class Processor
             action.group = group_data.id;
             action.result_i18n = group_data.i18n;
 
-            if (action.group !== this.config.main.group_other)
+            // for other groups, check if we find groups based on their area like "electronics"
+            if (action.group === this.config.main.group_other)
             {
-                _hasNonOtherGroup = true
+                for(let j = 0; j < this.config.main.groups_by_subarea.length; j++ )
+                {
+                    let subArea = this.config.main.groups_by_subarea[j];
+
+                    let found_areas = this.findAreas(action.area, subArea, action, []);
+                    if (found_areas.length > 0)
+                    {
+                        action.group = subArea;
+                        break;
+                    }
+                }
             }
 
             _actions.push(action);
         }
 
-        if( _hasNonOtherGroup )
-        {
-            // check "other" group. Is only possible in case that no "non other" group was detected
-            for (let i = 0; i < _actions.length; i++) {
-                let action = _actions[i];
-
-                // validate "sonstiges" group. Is only valid if we find a area for it.
-                if (action.group === this.config.main.group_other )
-                {
-                    action.group = null;
-                    action.result_i18n = null;
-                }
-            }
-        }
-
         // fill GROUP backward
-        let previousGroup = null;
+        let previousGroup = this.config.main.group_other;
         let previousResultI18N = null;
         for (let i = _actions.length - 1; i >= 0; i--)
         {
             let action = _actions[i];
-            if (action.group == null)
+
+            // inherit only "non other" groups and no groups detected by "groups_by_subarea"
+            if (action.group === this.config.main.group_other && !this.config.main.groups_by_subarea.includes(previousGroup) )
             {
                 action.group = previousGroup;
                 action.result_i18n = previousResultI18N;
@@ -120,12 +116,14 @@ class Processor
         }
 
         // fill GROUP forward
-        previousGroup = null;
+        previousGroup = this.config.main.group_other;
         previousResultI18N = null;
         for (let i = 0; i < _actions.length; i++)
         {
             let action = _actions[i];
-            if (action.group == null)
+
+            // inherit only "non other" groups and no groups detected by "groups_by_subarea"
+            if (action.group == this.config.main.group_other && !this.config.main.groups_by_subarea.includes(previousGroup) )
             {
                 action.group = previousGroup;
                 action.result_i18n = previousResultI18N;
@@ -261,14 +259,21 @@ class Processor
             let action = actions[i];
             if (action.area == null)
             {
-                let found_areas = this.findAreas(this.config.areas, null, action, _all_area_ids);
+                let found_areas = this.findAreas(null, "others", action, _all_area_ids);
                 if (found_areas.length > 0)
                 {
                     _actions = _actions.concat(this.fillAreas(found_areas, action));
                     continue;
                 }
 
-                found_areas = this.findAreas(this.config.areas, "fallback", action, _all_area_ids);
+                found_areas = this.findAreas(null, "all", action, _all_area_ids);
+                if (found_areas.length > 0)
+                {
+                    _actions = _actions.concat(this.fillAreas(found_areas, action));
+                    continue;
+                }
+
+                found_areas = this.findAreas("fallback", "all", action, _all_area_ids);
                 if (found_areas.length > 0)
                 {
                     _actions = _actions.concat(this.fillAreas(found_areas, action));
@@ -330,7 +335,7 @@ class Processor
             for (let i = 0; i < actions.length; i++)
             {
                 let action = actions[i];
-                let found_areas = this.findAreas(this.config.areas, action.area, action, _all_area_ids);
+                let found_areas = this.findAreas(action.area, action.group, action, _all_area_ids);
 
                 if (found_areas.length > 0)
                 {
@@ -352,15 +357,15 @@ class Processor
         return actions;
     }
 
-    findAreas(area_configs, current_area, action, exclude_ids)
+    findAreas(current_area, current_group, action, exclude_ids)
     {
         let _areas = [];
-        for (let i = 0; i < area_configs.length; i++)
+        for (let i = 0; i < this.config.areas.length; i++)
         {
-            let area_detail_config = area_configs[i];
+            let area_detail_config = this.config.areas[i];
 
             // check if this areas are available for the current group (lights, shutters etc)
-            if (!area_detail_config.groups.includes(action.group))
+            if (!area_detail_config.groups.includes(current_group))
             {
                 continue;
             }
