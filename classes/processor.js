@@ -142,7 +142,7 @@ class Processor
     findGroup(group_configs, action, local_groups, exclude_ids)
     {
         // I. if the area starts with "others", we should also force the group to "others"
-        if( action.area.startsWith( this.config.main.group_other.area_prefix ) )
+        if( action.area != null && action.area.startsWith( this.config.main.group_other.area_prefix ) )
         {
             local_groups.push(this.config.main.group_other.id);
             return this.config.main.group_other;
