@@ -28,10 +28,13 @@ class Processor
                 "phrase": sub_cmds[j],
                 // detected group
                 "group": null,
+                "group_inherited": null,
                 // detected area
                 "area": null,
+                "area_inherited": null,
                 // detected command
                 "cmd": null,
+                "cmd_inherited": null,
                 // detected command value like a percent value for a dimmer
                 "cmd_value": null,
                 // detected items
@@ -51,13 +54,19 @@ class Processor
         actions = this.detectAreas(actions, fallback_area, _all_area_ids);
 
         // Detect groups like lights, sockets, shutters, electronics, other etc
-        actions = this.detectGroups(actions);
+        actions = this.detectGroups(actions, fallback_area);
 
         // Detect command like ON, OFF, UP, DOWN, READ, PERCENT (dimmer). Possible commands are depending on the previous detected group
         actions = this.detectCommands(actions);
 
         // Detect area_details like floor_og, floor_eg ... Possible area_details are depending on the detected group and area
         actions = this.detectAreaDetails(actions, _all_area_ids);
+
+        // Clean all action where area, group and cmd is inherited
+        actions = this.cleanInvalidActions(actions);
+
+        //console.log(actions);
+        //return;
 
         // Detect items like livingroom couch light... Possible items are depending on the group, area and command
         actions = this.detectItems(actions);
@@ -67,7 +76,24 @@ class Processor
         return actions;
     }
 
-    detectGroups(actions,subAreaGroup)
+    cleanInvalidActions(actions)
+    {
+        for (let i = 0; i < actions.length; i++)
+        {
+            let action = actions[i];
+
+            if( action.area_inherited && action.cmd_inherited && action.group_inherited )
+            {
+                action.area = null;
+                action.group = null;
+                action.cmd = null;
+            }
+        }
+
+        return actions;
+    }
+
+    detectGroups(actions,fallback_area)
     {
         let _local_groups = [];
         let _actions = [];
@@ -78,7 +104,7 @@ class Processor
             let action = actions[i];
 
             // find main group like lights, sockets, rollershutter, electronics etc.
-            let group_data = this.findGroup(this.config.groups, action, _local_groups, []);
+            let group_data = this.findGroup(this.config.groups, action, _local_groups, [], fallback_area);
             if ( group_data != null )
             {
                 action.group = group_data.id;
@@ -98,6 +124,7 @@ class Processor
             // inherit only "non local groups" => not based on an area check
             if (action.group === null && !_local_groups.includes(previousGroup) )
             {
+                action.group_inherited = previousGroup != null;
                 action.group = previousGroup;
                 action.result_i18n = previousResultI18N;
             }
@@ -116,6 +143,7 @@ class Processor
             // inherit only "non local groups" => not based on an area check
             if (action.group === null && !_local_groups.includes(previousGroup) )
             {
+                action.group_inherited = previousGroup != null;
                 action.group = previousGroup;
                 action.result_i18n = previousResultI18N;
             }
@@ -139,7 +167,7 @@ class Processor
         return _actions;
     }
 
-    findGroup(group_configs, action, local_groups, exclude_ids)
+    findGroup(group_configs, action, local_groups, exclude_ids, fallback_area)
     {
         // I. if the area starts with "others", we should also force the group to "others"
         if( action.area != null && action.area.startsWith( this.config.main.group_other.area_prefix ) )
@@ -169,6 +197,18 @@ class Processor
                     local_groups.push(group_config.id);
                     return group_config;
                 }
+                // try again with the fallback area
+                else if( action.area_inherited )
+                {
+                    let found_areas = this.findAreas(fallback_area, group_config.id, action, []);
+                    if (found_areas.length > 0)
+                    {
+                        action.area = fallback_area;
+                        action.area_inherited = null;
+                        local_groups.push(group_config.id);
+                        return group_config;
+                    }
+                }
             }
         }
 
@@ -195,6 +235,7 @@ class Processor
             {
                 if (this.isCommandSupportedByGroup(previousCommand, action.group))
                 {
+                    action.cmd_inherited = previousCommand != null;
                     action.cmd = previousCommand;
                 }
                 else
@@ -216,6 +257,7 @@ class Processor
             {
                 if (this.isCommandSupportedByGroup(previousCommand, action.group))
                 {
+                    action.cmd_inherited = previousCommand != null;
                     action.cmd = previousCommand;
                 }
                 else
@@ -309,6 +351,7 @@ class Processor
             let action = _actions[i];
             if (action.area == null)
             {
+                action.area_inherited = previousArea != null;
                 action.area = previousArea;
             }
             previousArea = action.area;
@@ -321,6 +364,7 @@ class Processor
             let action = _actions[i];
             if (action.area == null)
             {
+                action.area_inherited = previousArea != null;
                 action.area = previousArea;
             }
             previousArea = action.area;
