@@ -1,6 +1,6 @@
 .idea/
 .env
-config
+config/*.js
 node_modules
 npm-debug.log
 voice.iml
