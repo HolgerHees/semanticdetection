@@ -41,11 +41,11 @@ const handlers = {
             return;
         }
 
+        //console.log(this.event.context.System.device.deviceId);
         //this.response.speak(this.event.context.System.device.deviceId);
         //this.emit(':responseReady');
         //return;
-        //console.log(this.event.context.System.device.deviceId);
-
+        
         let actions = processor.processPhrase(phrase, this.event.context.System.device.deviceId);
 
         let self = this;
