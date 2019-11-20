@@ -14,9 +14,9 @@ cp ./config/test.js.default ./config/test.js
 ```
 and adapt it to your needs
 
-2. Install nodejs6 and run
+2. Install nodejs10 and run
 
 ```console
-npm6 install
-npm6 run deploy
+npm10 install
+npm10 run deploy
 ```
