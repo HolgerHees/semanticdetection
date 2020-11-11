@@ -1,5 +1,6 @@
 'use strict';
-const Alexa = require('alexa-sdk');
+//const Alexa = require('alexa-sdk');
+const Alexa = require('ask-sdk-v1adapter');
 
 const Rest = require('./classes/rest.js');
 const Openhab = require("./classes/openhab.js");
@@ -30,10 +31,15 @@ const handlers = {
     {
         //this.emit('GetNewFactIntent');
     },
-    'ProcessPhrase': function ()
+    'ProcessPhrase': function (intent)
     {
 
-        let phrase = this.event.request.intent.slots.CatchAll.value;
+        //console.log("---Phrase---");
+        //console.log(intent);
+        //console.log(this.event);
+        //console.log("------");
+
+        let phrase = this.event.request.intent.slots.sentence.value;
 
         if (phrase === environment.main.phrase_stop)
         {
@@ -41,8 +47,7 @@ const handlers = {
             return;
         }
 
-        //console.log(this.event.context.System.device.deviceId);
-        //this.response.speak(this.event.context.System.device.deviceId);
+        //this.response.speak(phrase);
         //this.emit(':responseReady');
         //return;
         
@@ -107,5 +112,5 @@ const handlers = {
     'AMAZON.StopIntent': function ()
     {
         this.emit(':responseReady');
-    },
+    }
 };

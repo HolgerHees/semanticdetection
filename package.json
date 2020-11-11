@@ -6,7 +6,9 @@
   "author": "Holger Hees",
   "license": "GPLv2",
   "dependencies": {
-    "alexa-sdk": "^1.0.12"
+    "ask-sdk": "^2.10.0",
+    "ask-sdk-core": "^2.10.1",
+    "ask-sdk-v1adapter": "^2.10.0"
   },
   "optionalDependencies": {
     "node-lambda": "0.1.5"
