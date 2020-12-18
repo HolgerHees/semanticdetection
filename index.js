@@ -3,20 +3,15 @@
 const Alexa = require('ask-sdk-v1adapter');
 
 const Rest = require('./classes/rest.js');
-const Openhab = require("./classes/openhab.js");
-const Processor = require("./classes/processor.js");
-const Utils = require("./classes/utils.js");
 
-const numbers = require("./data/numbers.js");
-
-const environment = require("./config/environment.js");
 const config = require("./config/openhab.js");
+let logger = require('./classes/logger');
 
 let rest = new Rest(config);
-let openhab = new Openhab(rest);
-let processor = new Processor(environment, numbers);
 
 const APP_ID = "amzn1.ask.skill.e8230080-ee50-43aa-9f69-fc1b687665d6";
+
+let https = require('https');
 
 exports.handler = function (event, context, callback)
 {
@@ -40,61 +35,29 @@ const handlers = {
         //console.log("------");
 
         let phrase = this.event.request.intent.slots.sentence.value;
-
-        if (phrase === environment.main.phrase_stop)
-        {
-            this.emit(':responseReady');
-            return;
-        }
-
-        //this.response.speak(phrase);
-        //this.emit(':responseReady');
-        //return;
+        let client_id = this.event.context.System.device.deviceId;
         
-        let actions = processor.processPhrase(phrase, this.event.context.System.device.deviceId);
+        function getItemSuccess(response,alexa) {
+            //logger.info('getItemSuccess ' + response );
+            //logger.info(response);
+          
+            alexa.response.speak(response.state);
+            alexa.emit(':responseReady');
+        }
+        function postItemSuccess(response,alexa) {
+            //logger.info('postItemSuccess ' + response );
+            setTimeout(function(){
+                rest.getItem("VoiceMessage",getItemSuccess,requestError,alexa)
+            },100)
+        }
+        function requestError(response,alexa) {
+            logger.info('requestError ' + response );
 
-        let self = this;
-
-        openhab.processActions(actions, function (itemCount, success_messages, error_messages)
-        {
-            // check for default error message if nothing was found
-            if (itemCount === 0)
-            {
-                if (error_messages.length === 0) error_messages.push(environment.i18n.nothing_found);
-            }
-            // add default success message if there was no other success message
-            else
-            {
-                if (success_messages.length === 0) success_messages.push(environment.i18n.ok_message);
-            }
-
-            // combine all messages to a "final" message string
-            let messages = [];
-            if (success_messages.length > 0)
-            {
-                messages = messages.concat(success_messages.join(environment.i18n.message_join_separator));
-            }
-            if (error_messages.length > 0)
-            {
-                if (messages.length > 0) messages.push(environment.i18n.message_error_separator);
-                messages = messages.concat(error_messages.join(environment.i18n.message_join_separator));
-            }
-
-            let message = Utils.capitalizeFirstLetter(messages.join(""));
-
-            // in case of an error ask for "more"
-            if (error_messages.length > 0)
-            {
-                self.response.speak(message).listen(Utils.capitalizeFirstLetter(itemCount === 0 ? environment.i18n.ask_to_repeat_everything : environment.i18n.ask_to_repeat_part));
-            }
-            else
-            {
-                self.response.speak(message);
-            }
-
-            self.emit(':responseReady');
-        });
-
+            alexa.response.speak("request error");
+            alexa.emit(':responseReady');
+        }
+        
+        rest.postItemCommand("VoiceCommand",phrase+"|"+client_id,postItemSuccess,requestError,this)
     },
     'Unhandled': function ()
     {

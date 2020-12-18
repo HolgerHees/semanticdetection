@@ -32,7 +32,7 @@ class Rest
             {
                 if (response.statusCode !== 200)
                 {
-                    failure({message: 'Error response ' + response.statusCode});
+                    failure({message: 'Error response ' + response.statusCode},payload);
                     logger.info('getItem failed for url: ' + options.path + ' code: ' + response.statusCode + ' data: ' + data);
                     return;
                 }
@@ -60,7 +60,7 @@ class Rest
             }
             else
             {
-                failure({message: 'Error response ' + response.statusCode});
+                failure({message: 'Error response ' + response.statusCode}, payload);
             }
             response.on('error', function (e)
             {
