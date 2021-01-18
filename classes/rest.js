@@ -49,7 +49,7 @@ class Rest
 
     postItemCommand(itemName, value, success, failure, payload)
     {
-        let options = this.buildRequestOptions(itemName, 'POST', value.length);
+        let options = this.buildRequestOptions(itemName, 'POST', Buffer.byteLength(value));
 
         let req = https.request(options, function (response)
         {
