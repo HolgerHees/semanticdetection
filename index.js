@@ -28,13 +28,13 @@ const handlers = {
     },
     'ProcessPhrase': function (intent)
     {
-
         //console.log("---Phrase---");
         //console.log(intent);
         //console.log(this.event);
+        //console.log(this.event.request.intent.slots);
         //console.log("------");
 
-        let phrase = this.event.request.intent.slots.sentence.value;
+        let phrase = this.event.request.intent.slots.CatchAll.value;
         let client_id = this.event.context.System.device.deviceId;
         
         function getItemSuccess(response,alexa) {
